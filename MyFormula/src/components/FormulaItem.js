@@ -1,8 +1,11 @@
 import React from "react";
 
-const FormulaItem = ({ formula }) => {
+const FormulaItem = ({ formula, onSelectFormula }) => {
     return (
-        <div className="card bg-white mb-3 shadow round">
+        <div
+            className="card bg-white mb-3 shadow round"
+            onClick={() => onSelectFormula(formula)}
+        >
             <h5 className="card-header bg-primary text-white">
                 {formula.name}
             </h5>

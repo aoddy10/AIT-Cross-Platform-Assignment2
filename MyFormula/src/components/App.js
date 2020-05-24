@@ -1,6 +1,7 @@
 import React from "react";
 import FormulaList from "./FormulaList";
 import AddFormula from "./AddFormular";
+import Formula from "./Formula";
 
 class App extends React.Component {
     API_URL = "http://localhost:5000";
@@ -8,19 +9,19 @@ class App extends React.Component {
     APP_DES =
         "This app use for create your own equation that you can add variable as much as you prefer. Also, you can change/edit your equation anytime.";
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            formulas: [],
-            showFormulaList: true,
-            showAddFormula: false,
-        };
-
-        this.handleShowAddFormula = this.handleShowAddFormula.bind(this);
-    }
+    state = {
+        formulas: [],
+        selectedFormula: "",
+        showFormulaList: true,
+        showAddFormula: false,
+        showFormula: false,
+    };
 
     componentDidMount() {
+        this.getAllFormula();
+    }
+
+    getAllFormula = () => {
         fetch(this.API_URL + "/formula/all")
             .then((res) => res.json())
             .then(
@@ -33,15 +34,39 @@ class App extends React.Component {
                     console.log(error);
                 }
             );
-    }
+    };
 
     onAddNewFormula = (newFormula) => {
         console.log("Add new formula", newFormula);
-        this.setState({ showAddFormula: false, showFormulaList: true });
+
+        // add new formula
+
+        // refresh
+        this.onShowFormulaList();
+    };
+
+    onShowFormulaList = () => {
+        this.setState({
+            showFormulaList: true,
+            showAddFormula: false,
+            showFormula: false,
+        });
+    };
+
+    onSelectFormula = async (formala) => {
+        this.setState({ selectedFormula: formala });
+
+        this.setState({
+            showFormula: true,
+            showFormulaList: false,
+        });
     };
 
     handleShowAddFormula = async () => {
-        await this.setState({ showFormulaList: false, showAddFormula: true });
+        await this.setState({
+            showFormulaList: false,
+            showAddFormula: true,
+        });
     };
 
     render() {
@@ -51,7 +76,10 @@ class App extends React.Component {
                 <p>{this.APP_DES}</p>
                 {this.state.showFormulaList ? (
                     <div>
-                        <FormulaList formulas={this.state.formulas} />
+                        <FormulaList
+                            formulas={this.state.formulas}
+                            onSelectFormula={this.onSelectFormula}
+                        />
                         <button
                             type="button"
                             className="btn btn-success w-100 mt-2 mb-2 p-2"
@@ -65,8 +93,16 @@ class App extends React.Component {
                         </button>
                     </div>
                 ) : null}
+
                 {this.state.showAddFormula ? (
                     <AddFormula onAddNewFormula={this.onAddNewFormula} />
+                ) : null}
+
+                {this.state.showFormula ? (
+                    <Formula
+                        formula={this.state.selectedFormula}
+                        onClose={this.onShowFormulaList}
+                    />
                 ) : null}
             </div>
         );
