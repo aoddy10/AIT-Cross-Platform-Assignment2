@@ -2,12 +2,12 @@ import React from "react";
 
 const FormulaItem = ({ formula }) => {
     return (
-        <div className="card bg-white mb-2">
-            <div className="card-header bg-primary text-white">
+        <div className="card bg-white mb-3 shadow round">
+            <h5 className="card-header bg-primary text-white">
                 {formula.name}
-            </div>
+            </h5>
             <div className="card-body">
-                <h5 className="card-title">{formula.equation}</h5>
+                <h3 className="card-title ">{formula.equation}</h3>
                 <p className="card-text">{formula.description}</p>
             </div>
         </div>
