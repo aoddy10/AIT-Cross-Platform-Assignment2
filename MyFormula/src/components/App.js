@@ -6,8 +6,6 @@ import Formula from "./Formula";
 class App extends React.Component {
     API_URL = "http://localhost:5000";
     APP_NAME = "MyFormula";
-    APP_DES =
-        "This app use for create your own equation that you can add variable as much as you prefer. Also, you can change/edit your equation anytime.";
 
     state = {
         formulas: [],
@@ -41,6 +39,11 @@ class App extends React.Component {
 
         // add new formula
 
+        // update formula in state
+        let tempFormulaArray = this.state.formulas;
+        tempFormulaArray.push(newFormula);
+        this.setState({ formulas: tempFormulaArray });
+
         // refresh
         this.onShowFormulaList();
     };
@@ -73,7 +76,6 @@ class App extends React.Component {
         return (
             <div className="container-fluid">
                 <h1 className="text-center mt-2">{this.APP_NAME}</h1>
-                <p>{this.APP_DES}</p>
                 {this.state.showFormulaList ? (
                     <div>
                         <FormulaList

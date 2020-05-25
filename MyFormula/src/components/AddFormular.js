@@ -1,9 +1,17 @@
 import React from "react";
+import AddVariable from "./AddVariable";
 
 class AddFormula extends React.Component {
-    state = { name: "", description: "", equation: "" };
+    state = {
+        name: "",
+        description: "",
+        equation: "",
+        variables: [],
+        valiableList: "",
+    };
 
     handleName = (event) => this.setState({ name: event.target.value });
+
     handleDescription = (event) =>
         this.setState({ description: event.target.value });
     handleEquation = (event) => this.setState({ equation: event.target.value });
@@ -11,12 +19,40 @@ class AddFormula extends React.Component {
     onClickSave = (event) => {
         event.preventDefault();
 
-        this.props.onAddNewFormula(this.state);
+        this.props.onAddNewFormula({
+            name: this.state.name,
+            description: this.state.description,
+            equation: this.state.equation,
+            variables: this.state.variables,
+        });
     };
 
     onClickCancel = (event) => {
         event.preventDefault();
         this.props.onAddNewFormula(null);
+    };
+
+    onAddNewVariable = async (variable) => {
+        console.log("Add new variable", variable);
+
+        // add new variable to formula
+        let tempArray = this.state.variables;
+        tempArray.push(variable);
+        this.setState({ variables: tempArray });
+
+        // generate valiable list
+        let tempVariableList = this.state.variables.map((variable, index) => {
+            return (
+                <div key={index}>
+                    {variable.letter} : {variable.meaning}
+                </div>
+            );
+        });
+
+        // update variable list
+        this.setState({
+            variableList: tempVariableList,
+        });
     };
 
     render() {
@@ -63,20 +99,13 @@ class AddFormula extends React.Component {
                         </div>
 
                         <div className="mb-3 d-flex flex-column">
-                            <button
-                                type="button"
-                                className="btn btn-success mt-2 mb-2 p-2"
-                                variant="primary"
-                                onClick={this.handleShowAddFormula}
-                            >
-                                <span className="mr-2">
-                                    <i className="far fa-plus-square"></i>
-                                </span>
-                                Add variable
-                            </button>
+                            <h6>Variables</h6>
 
-                            <div>Variable</div>
+                            <div>{this.state.variableList}</div>
 
+                            <AddVariable
+                                onAddNewVariable={this.onAddNewVariable}
+                            />
                             <div className="p-2"></div>
                         </div>
                     </div>
