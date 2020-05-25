@@ -3,6 +3,7 @@ import FormulaList from "./FormulaList";
 import AddFormula from "./AddFormular";
 import Formula from "./Formula";
 import HttpService from "./HttpService";
+import { reactLocalStorage } from "reactjs-localstorage";
 
 class App extends React.Component {
     APP_NAME = "MyFormula";
@@ -15,18 +16,16 @@ class App extends React.Component {
         showFormula: false,
     };
 
-    componentDidMount() {
-        this.getAllFormula();
-    }
-
-    // get formula form api
-    getAllFormula = async () => {
-        let response = await HttpService.get("/formula/all");
+    async componentDidMount() {
+        reactLocalStorage.clear();
+        let result = await HttpService.get("/formula/all");
         // check response data
-        if (response.status !== 200) return;
+        if (result.status !== 200 || !result.data) return;
+        this.setState({ formulas: result.data });
 
-        this.setState({ formulas: response.data });
-    };
+        // save to local storage
+        reactLocalStorage.set("formulas", result.data);
+    }
 
     onAddNewFormula = async (newFormula) => {
         console.log("Add new formula", newFormula);
@@ -49,6 +48,9 @@ class App extends React.Component {
         let tempFormulaArray = this.state.formulas;
         tempFormulaArray.push(newFormula);
         this.setState({ formulas: tempFormulaArray });
+
+        // save in local storage
+        reactLocalStorage.set("formulas", this.state.formulas);
 
         // refresh formula list
         this.onShowFormulaList();

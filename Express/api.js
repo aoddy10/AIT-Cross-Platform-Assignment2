@@ -12,15 +12,22 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-let rawdata = fs.readFileSync("data.json");
-let formulaData = JSON.parse(rawdata);
-
 app.get("/", function (req, res) {
     res.send("Hello World");
 });
 
+const jsonFile = "data.json";
+
+function readDataFile() {
+    let formulaData;
+    let rawdata = fs.readFileSync(jsonFile);
+    if (rawdata) formulaData = JSON.parse(rawdata);
+    return formulaData;
+}
+
 app.get("/formula/all", function (req, res, next) {
-    res.send(formulaData);
+    data = readDataFile();
+    res.send(data);
 });
 
 app.post("/addNewFormula", function (req, res, next) {
@@ -40,8 +47,14 @@ app.post("/addNewFormula", function (req, res, next) {
         return;
     }
 
+    let data = readDataFile();
+
     // add new formula to data
-    formulaData.push(formula);
+    data.push(formula);
+    // save data to jsonfile
+    fs.writeFile(jsonFile, JSON.stringify(data), "utf8", (res) => {
+        console.log(res);
+    });
 
     res.set(200).send({ isError: false, message: "Add new formular success" });
 });
