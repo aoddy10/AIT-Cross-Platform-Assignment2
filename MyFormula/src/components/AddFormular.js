@@ -33,8 +33,6 @@ class AddFormula extends React.Component {
     };
 
     onAddNewVariable = async (variable) => {
-        console.log("Add new variable", variable);
-
         // add new variable to formula
         let tempArray = this.state.variables;
         tempArray.push(variable);

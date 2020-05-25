@@ -2,9 +2,9 @@ import React from "react";
 import FormulaList from "./FormulaList";
 import AddFormula from "./AddFormular";
 import Formula from "./Formula";
+import HttpService from "./HttpService";
 
 class App extends React.Component {
-    API_URL = "http://localhost:5000";
     APP_NAME = "MyFormula";
 
     state = {
@@ -19,32 +19,38 @@ class App extends React.Component {
         this.getAllFormula();
     }
 
-    getAllFormula = () => {
-        fetch(this.API_URL + "/formula/all")
-            .then((res) => res.json())
-            .then(
-                (result) => {
-                    this.setState({
-                        formulas: result,
-                    });
-                },
-                (error) => {
-                    console.log(error);
-                }
-            );
+    // get formula form api
+    getAllFormula = async () => {
+        let response = await HttpService.get("/formula/all");
+        // check response data
+        if (response.status !== 200) return;
+
+        this.setState({ formulas: response.data });
     };
 
-    onAddNewFormula = (newFormula) => {
+    onAddNewFormula = async (newFormula) => {
         console.log("Add new formula", newFormula);
 
         // add new formula
+        let result = await HttpService.post("/addNewFormula", newFormula)
+            .then((response) => {
+                return response;
+            })
+            .catch((error) => {
+                return error;
+            });
+        // check if http request is successful
+        if (result.status !== 200) {
+            // TODO: display error toast
+            return;
+        }
 
         // update formula in state
         let tempFormulaArray = this.state.formulas;
         tempFormulaArray.push(newFormula);
         this.setState({ formulas: tempFormulaArray });
 
-        // refresh
+        // refresh formula list
         this.onShowFormulaList();
     };
 
