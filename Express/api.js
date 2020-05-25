@@ -53,7 +53,7 @@ app.post("/addNewFormula", function (req, res, next) {
     data.push(formula);
     // save data to jsonfile
     fs.writeFile(jsonFile, JSON.stringify(data), "utf8", (res) => {
-        console.log(res);
+        console.log("Update data.json");
     });
 
     res.set(200).send({ isError: false, message: "Add new formular success" });

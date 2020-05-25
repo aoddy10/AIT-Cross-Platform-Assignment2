@@ -4,7 +4,7 @@ class AddVariable extends React.Component {
     state = {
         letter: "",
         meaning: "",
-        value: "",
+        value: 0,
     };
 
     // handle input text
@@ -22,7 +22,7 @@ class AddVariable extends React.Component {
         this.props.onAddNewVariable(this.state);
 
         // reset variable
-        this.setState({ letter: "", meaning: "", value: "" });
+        this.setState({ letter: "", meaning: "", value: 0 });
     };
 
     render() {

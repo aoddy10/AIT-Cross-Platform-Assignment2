@@ -28,8 +28,6 @@ class App extends React.Component {
     }
 
     onAddNewFormula = async (newFormula) => {
-        console.log("Add new formula", newFormula);
-
         // add new formula
         let result = await HttpService.post("/addNewFormula", newFormula)
             .then((response) => {
