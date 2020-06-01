@@ -1,5 +1,13 @@
 import React from 'react';
-import {View, Text, Button} from 'react-native';
+import {View, Text} from 'react-native';
+import {
+  Title,
+  Caption,
+  Paragraph,
+  TextInput,
+  Subheading,
+  Button,
+} from 'react-native-paper';
 import FormulaVariable from './FormulaVariable';
 var Parser = require('expr-eval').Parser;
 
@@ -33,17 +41,17 @@ class Formula extends React.Component {
     this.setState({variableList: variableList});
   }
 
-  onUpdateVariable = varible => {
+  onUpdateVariable = async varible => {
     // update value for variable
     let variables = this.state.variables;
-    let i = variables.findIndex(item => {
+    let i = await variables.findIndex(item => {
       return item.letter === varible.letter;
     });
     variables[i].value = varible.value;
 
     // create source for calulate
     let calSource = '{';
-    variables.forEach(item => {
+    await variables.forEach(item => {
       if (calSource !== '{') calSource += ',';
       calSource += '"' + item.letter + '":';
       if (item.value === '') calSource += 0;
@@ -60,28 +68,41 @@ class Formula extends React.Component {
 
   render() {
     return (
-      <View className="card bg-white mb-3 shadow round">
-        <Text className="card-header bg-secondary text-white">
+      <View>
+        <Title className="card-header bg-secondary text-white">
           {this.state.name}
-        </Text>
+        </Title>
 
-        <View className="card-body">
-          <Text>{this.state.description}</Text>
-          <View className="mt-4 mb-4 bg-light p-2">
-            <Text>Equation</Text>
-            <Text>
-              {this.state.equation} = {this.state.answer}
-            </Text>
-          </View>
+        {this.state.description ? (
+          <Paragraph style={{marginBottom: 8}}>
+            {this.state.description}
+          </Paragraph>
+        ) : null}
+
+        <View
+          style={{
+            backgroundColor: '#f0f0f0',
+            padding: 8,
+            marginBottom: 16,
+            marginTop: 16,
+          }}>
+          <Subheading>Equation</Subheading>
+          <Title style={{fontSize: 28}}>
+            {this.state.equation} = {this.state.answer}
+          </Title>
         </View>
 
-        <View>{this.state.variableList}</View>
+        <View style={{marginBottom: 16}}>{this.state.variableList}</View>
 
         <Button
-          className="btn btn-primary"
-          onPress={() => this.props.onClose()}
-          title="Close"
-        />
+          mode="contained"
+          onPress={() => {
+            this.setState({variables: []});
+            this.props.onClose();
+          }}
+          title="Close">
+          Close
+        </Button>
       </View>
     );
   }

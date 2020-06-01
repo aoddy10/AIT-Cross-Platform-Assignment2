@@ -1,5 +1,6 @@
 import React from 'react';
-import {View, TextInput, Button} from 'react-native';
+import {View} from 'react-native';
+import {TextInput, Button} from 'react-native-paper';
 
 class AddVariable extends React.Component {
   state = {
@@ -18,30 +19,32 @@ class AddVariable extends React.Component {
 
   render() {
     return (
-      <View>
-        <View className="d-flex flex-col mb-2">
-          <TextInput
-            id="letter"
-            className="col-3 form-control"
-            onChangeText={text => this.setState({letter: text})}
-            value={this.state.letter}
-            placeholder="Var"
-          />
-          <TextInput
-            id="description"
-            className="col-9 form-control"
-            onChangeText={text => this.setState({meaning: text})}
-            value={this.state.meaning}
-            placeholder="Description"
-          />
-        </View>
+      <View style={{display: 'flex', flexDirection: 'row'}}>
+        <TextInput
+          label="Variable"
+          id="letter"
+          onChangeText={text => this.setState({letter: text})}
+          value={this.state.letter}
+          mode="outlined"
+          style={{width: 100}}
+        />
+
+        <TextInput
+          id="description"
+          onChangeText={text => this.setState({meaning: text})}
+          value={this.state.meaning}
+          label="Description"
+          mode="outlined"
+          style={{width: 'auto'}}
+        />
 
         <Button
-          className="btn btn-primary w-100"
+          mode="contained"
           onPress={this.onClickAddVariable}
-          title="Add Variable"
           disabled={this.state.letter === '' || this.state.meaning === ''}
-        />
+          style={{alignSelf: 'flex-end'}}>
+          Add
+        </Button>
       </View>
     );
   }

@@ -1,17 +1,26 @@
 import React from 'react';
 import FormulaItem from './FormulaItem';
-import {View} from 'react-native';
+import {View, Text} from 'react-native';
 
 const FormulaList = ({formulas, onSelectFormula}) => {
-  const formulaList = formulas.map((formula, index) => {
+  if (formulas.length > 0) {
+    const formulaList = formulas.map((formula, index) => {
+      return (
+        <FormulaItem
+          key={index}
+          formula={formula}
+          onSelectFormula={onSelectFormula}
+        />
+      );
+    });
+    return <View>{formulaList}</View>;
+  } else {
     return (
-      <FormulaItem
-        key={index}
-        formula={formula}
-        onSelectFormula={onSelectFormula}
-      />
+      <View>
+        <Text>Please add new formula</Text>
+      </View>
     );
-  });
+  }
 
   return <View>{formulaList}</View>;
 };

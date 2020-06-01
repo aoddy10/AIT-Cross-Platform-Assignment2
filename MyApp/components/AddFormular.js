@@ -1,6 +1,14 @@
 import React from 'react';
 import AddVariable from './AddVariable';
-import {View, Text, TextInput, Button} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
+import {
+  Title,
+  Caption,
+  Paragraph,
+  TextInput,
+  Subheading,
+  Button,
+} from 'react-native-paper';
 
 class AddFormula extends React.Component {
   state = {
@@ -11,9 +19,7 @@ class AddFormula extends React.Component {
     valiableList: '',
   };
 
-  onClickSave = event => {
-    event.preventDefault();
-
+  onClickSave = () => {
     this.props.onAddNewFormula({
       name: this.state.name,
       description: this.state.description,
@@ -45,71 +51,68 @@ class AddFormula extends React.Component {
 
   render() {
     return (
-      <View className="card p-4 shadow">
-        <Text className="">Add New Formular</Text>
-        <View className="form-row">
-          <View className="mb-3">
-            <Text>Formular Name</Text>
-            <TextInput
-              id="name"
-              style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-              onChangeText={text => this.setState({name: text})}
-              value={this.state.name}
-              placeholder="Formula name"
-            />
-          </View>
-          <View className="mb-3">
-            <Text>Description</Text>
-            <TextInput
-              className="form-control"
-              style={{height: 100, borderColor: 'gray', borderWidth: 1}}
-              onChangeText={text => this.setState({description: text})}
-              value={this.state.description}
-              placeholder="Description"
-            />
-          </View>
+      <View>
+        <Title>Add New Formular</Title>
+        <Subheading>Detail:</Subheading>
+        <TextInput
+          label="Formula name"
+          id="name"
+          value={this.state.text}
+          onChangeText={text => this.setState({name: text})}
+          mode="outlined"
+          style={styles.input}
+        />
 
-          <View className="mb-3">
-            <Text>Equation</Text>
-            <TextInput
-              id="equation"
-              className="form-control"
-              onChangeText={text => this.setState({equation: text})}
-              value={this.state.equation}
-              placeholder="Equation"
-            />
-          </View>
+        <TextInput
+          label="Description"
+          id="Description"
+          onChangeText={text => this.setState({description: text})}
+          value={this.state.description}
+          mode="outlined"
+          style={styles.input}
+        />
 
-          <View className="mb-3 d-flex flex-column">
-            <Text>Variables</Text>
+        <TextInput
+          label="Equation"
+          id="equation"
+          onChangeText={text => this.setState({equation: text})}
+          value={this.state.equation}
+          mode="outlined"
+          style={styles.input}
+        />
 
-            <Text>{this.state.variableList}</Text>
+        <Subheading>Variables</Subheading>
+        <AddVariable onAddNewVariable={this.onAddNewVariable} />
+        <Paragraph>{this.state.variableList}</Paragraph>
 
-            <AddVariable onAddNewVariable={this.onAddNewVariable} />
-          </View>
-        </View>
+        <View>
+          <Button
+            mode="contained"
+            onPress={() => this.onClickSave()}
+            disabled={this.state.name === '' || this.state.equation === ''}
+            style={styles.button}>
+            Save
+          </Button>
 
-        <View className="d-flex">
-          <View className="col-6 p-1">
-            <Button
-              className="btn btn-primary w-100"
-              onPress={this.onClickSave}
-              title="Save"
-              disabled={this.state.name === '' || this.state.equation === ''}
-            />
-          </View>
-
-          <View className="col-6 p-1">
-            <Button
-              className="btn btn-secondary w-100"
-              onPress={() => this.props.onAddNewFormula(null)}
-              title="Cancel"
-            />
-          </View>
+          <Button
+            mode="contained"
+            onPress={() => this.props.onAddNewFormula(null)}
+            style={styles.button}>
+            Cancel
+          </Button>
         </View>
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  input: {
+    marginBottom: 8,
+  },
+  button: {
+    marginBottom: 8,
+  },
+});
 
 export default AddFormula;

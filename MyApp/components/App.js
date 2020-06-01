@@ -1,8 +1,10 @@
 import React from 'react';
 import {
   Appbar,
+  Badge,
   DefaultTheme,
   Provider as PaperProvider,
+  Avatar,
 } from 'react-native-paper';
 import {
   SafeAreaView,
@@ -119,6 +121,7 @@ class App extends React.Component {
     await this.setState({
       showFormulaList: false,
       showAddFormula: true,
+      showFormula: false,
     });
   };
 
@@ -126,22 +129,32 @@ class App extends React.Component {
     return (
       <PaperProvider theme={this.theme}>
         <Appbar.Header>
-          <Appbar.Content title="myFormula" />
+          <Appbar.Content title={appName} />
+          <Badge
+            visible={
+              this.state.formulas.length && this.state.formulas.length > 0
+            }
+            size={16}
+            style={{position: 'absolute', top: 5, right: 5}}>
+            {this.state.formulas.length}
+          </Badge>
+          <Appbar.Action
+            icon={'plus'}
+            onPress={() => this.handleShowAddFormula()}
+          />
+          <Appbar.Action
+            icon={
+              this.state.formulas.length ? 'dots-horizontal' : 'dots-vertical'
+            }
+          />
         </Appbar.Header>
 
-        <View style="container-fluid p-4">
-          <Text>{appName}</Text>
+        <View style={styles.container}>
           {this.state.showFormulaList ? (
-            <View>
-              <FormulaList
-                formulas={this.state.formulas}
-                onSelectFormula={this.onSelectFormula}
-              />
-              <Button
-                onPress={this.handleShowAddFormula}
-                title="Add new formula"
-              />
-            </View>
+            <FormulaList
+              formulas={this.state.formulas}
+              onSelectFormula={this.onSelectFormula}
+            />
           ) : null}
 
           {this.state.showAddFormula ? (
@@ -159,5 +172,12 @@ class App extends React.Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 16,
+  },
+  addSection: {},
+});
 
 export default App;

@@ -1,1 +1,20 @@
-[{"name":"Gross Profit","description":"Use to calculate gross profit and loss","equation":"Inc - Exp","variables":[{"letter":"Inc","meaning":"Income","value":0},{"letter":"Exp","meaning":"Expense","value":0}]},{"name":"test","description":"","equation":"(x*y)-x","variables":[{"letter":"x","meaning":"dfasdfsdf","value":0},{"letter":"y","meaning":"dfadsfsdafasdf","value":0}]}]
+[
+    {
+        "name": "Gross Profit",
+        "description": "Use to calculate gross profit and loss",
+        "equation": "Inc - Exp",
+        "variables": [
+            { "letter": "Inc", "meaning": "Income", "value": 0 },
+            { "letter": "Exp", "meaning": "Expense", "value": 0 }
+        ]
+    },
+    {
+        "name": "test",
+        "description": "",
+        "equation": "(x*y)-x",
+        "variables": [
+            { "letter": "x", "meaning": "dfasdfsdf", "value": 0 },
+            { "letter": "y", "meaning": "dfadsfsdafasdf", "value": 0 }
+        ]
+    }
+]

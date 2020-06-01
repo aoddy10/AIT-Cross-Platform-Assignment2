@@ -1,5 +1,6 @@
 import React from 'react';
-import {View, Text, TextInput} from 'react-native';
+import {View, Text} from 'react-native';
+import {TextInput} from 'react-native-paper';
 
 class FormulaVariable extends React.Component {
   state = {
@@ -16,17 +17,17 @@ class FormulaVariable extends React.Component {
 
   render() {
     return (
-      <View>
+      <View style={{marginBottom: 8}}>
         <Text className="w-auto mb-2">
           {this.state.letter} : {this.state.meaning}
         </Text>
 
         <TextInput
-          id="description"
-          className="mb-2"
-          onChangeText={e => this.handleValue(parseInt(e) || '')}
-          value={this.state.value}
-          keyboardType="number-pad"
+          id="equation"
+          onChangeText={text => this.handleValue(parseInt(text) || '')}
+          value={this.state.equation}
+          mode="outlined"
+          keyboardType="number-pads"
         />
       </View>
     );
