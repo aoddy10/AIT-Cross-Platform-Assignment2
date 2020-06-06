@@ -4,7 +4,6 @@ import {
   Badge,
   DefaultTheme,
   Provider as PaperProvider,
-  Avatar,
 } from 'react-native-paper';
 import {
   SafeAreaView,
@@ -17,14 +16,6 @@ import {
   KeyboardAvoidingView,
   Alert,
 } from 'react-native';
-
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
 
 import AsyncStorage from '@react-native-community/async-storage';
 

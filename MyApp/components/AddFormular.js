@@ -81,6 +81,23 @@ class AddFormula extends React.Component {
           style={styles.input}
         />
 
+        <View style={{marginTop: 8, marginBottom: 8}}>
+          <Text
+            style={{
+              padding: 2,
+              backgroundColor: '#FF0000',
+              color: '#ffffff',
+              width: 60,
+              textAlign: 'center',
+            }}>
+            Note
+          </Text>
+          <Text style={{fontSize: 12}}>
+            * Variable has to be letter a-z or A-Z. It can be single letter of
+            more than one letter. Example: x, Y, Inc, Income
+          </Text>
+        </View>
+
         <View
           style={{
             borderWidth: 1,
@@ -119,7 +136,7 @@ class AddFormula extends React.Component {
 
 const styles = StyleSheet.create({
   input: {
-    marginBottom: 8,
+    marginBottom: 0,
   },
   button: {
     marginBottom: 8,
