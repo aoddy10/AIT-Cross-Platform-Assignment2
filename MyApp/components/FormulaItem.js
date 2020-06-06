@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import {Avatar, Button, Card, Title, Paragraph} from 'react-native-paper';
 
-const FormulaItem = ({formula, onSelectFormula}) => {
+const FormulaItem = ({formula, onSelectFormula, onSelectDeleteFormula}) => {
   return (
     <Card style={styles.card}>
       <Card.Title title={formula.name} style={styles.title} />
@@ -12,6 +12,7 @@ const FormulaItem = ({formula, onSelectFormula}) => {
       </Card.Content>
       <Card.Actions style={styles.actionSection}>
         <Button onPress={() => onSelectFormula(formula)}>OK</Button>
+        <Button onPress={() => onSelectDeleteFormula(formula)}>Delete</Button>
       </Card.Actions>
     </Card>
   );

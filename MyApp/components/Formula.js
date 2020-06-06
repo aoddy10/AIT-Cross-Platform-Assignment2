@@ -12,14 +12,18 @@ import FormulaVariable from './FormulaVariable';
 var Parser = require('expr-eval').Parser;
 
 class Formula extends React.Component {
-  state = {
-    name: '',
-    description: '',
-    equation: '',
-    variables: [],
-    answer: '?',
-    variableList: [],
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      name: '',
+      description: '',
+      equation: '',
+      variables: [],
+      answer: '?',
+      variableList: [],
+    };
+  }
 
   async componentDidMount() {
     await this.setState({
@@ -27,6 +31,7 @@ class Formula extends React.Component {
       description: this.props.formula.description,
       equation: this.props.formula.equation,
       variables: this.props.formula.variables,
+      variableList: this.props.formula.variableList,
     });
 
     let variableList = this.state.variables.map((variable, index) => {
@@ -41,13 +46,14 @@ class Formula extends React.Component {
     this.setState({variableList: variableList});
   }
 
-  onUpdateVariable = async varible => {
+  onUpdateVariable = async variable => {
     // update value for variable
+    console.log(this.state.variables);
     let variables = this.state.variables;
     let i = await variables.findIndex(item => {
-      return item.letter === varible.letter;
+      return item.letter === variable.letter;
     });
-    variables[i].value = varible.value;
+    variables[i].value = variable.value;
 
     // create source for calulate
     let calSource = '{';

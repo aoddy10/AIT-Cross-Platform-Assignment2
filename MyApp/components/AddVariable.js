@@ -19,30 +19,31 @@ class AddVariable extends React.Component {
 
   render() {
     return (
-      <View style={{display: 'flex', flexDirection: 'row'}}>
-        <TextInput
-          label="Variable"
-          id="letter"
-          onChangeText={text => this.setState({letter: text})}
-          value={this.state.letter}
-          mode="outlined"
-          style={{width: 100}}
-        />
+      <View>
+        <View style={{display: 'flex', flexDirection: 'row', marginBottom: 8}}>
+          <TextInput
+            label="Variable"
+            id="letter"
+            onChangeText={text => this.setState({letter: text})}
+            value={this.state.letter}
+            mode="outlined"
+            style={{flex: 0.3}}
+          />
 
-        <TextInput
-          id="description"
-          onChangeText={text => this.setState({meaning: text})}
-          value={this.state.meaning}
-          label="Description"
-          mode="outlined"
-          style={{width: 'auto'}}
-        />
+          <TextInput
+            id="description"
+            onChangeText={text => this.setState({meaning: text})}
+            value={this.state.meaning}
+            label="Description"
+            mode="outlined"
+            style={{flex: 0.7}}
+          />
+        </View>
 
         <Button
           mode="contained"
           onPress={this.onClickAddVariable}
-          disabled={this.state.letter === '' || this.state.meaning === ''}
-          style={{alignSelf: 'flex-end'}}>
+          disabled={this.state.letter === '' || this.state.meaning === ''}>
           Add
         </Button>
       </View>

@@ -27,7 +27,7 @@ class FormulaVariable extends React.Component {
           onChangeText={text => this.handleValue(parseInt(text) || '')}
           value={this.state.equation}
           mode="outlined"
-          keyboardType="number-pads"
+          keyboardType="number-pad"
         />
       </View>
     );

@@ -30,7 +30,7 @@ app.get("/formula/all", function (req, res, next) {
     res.send(data);
 });
 
-app.post("/addNewFormula", function (req, res, next) {
+app.post("/formula/addNew", function (req, res, next) {
     if (!req.body) {
         res.set(400).send({ isError: true, message: "Don't have requst data" });
         return;
@@ -57,6 +57,31 @@ app.post("/addNewFormula", function (req, res, next) {
     });
 
     res.set(200).send({ isError: false, message: "Add new formular success" });
+});
+
+app.post("/formula/delete", function (req, res, next) {
+    if (!req.body) {
+        res.set(400).send({ isError: true, message: "Don't have requst data" });
+        return;
+    }
+    let formula = req.body;
+    console.log(formula);
+
+    let data = readDataFile();
+    console.log(data);
+
+    // remove formula from data
+    let i = data.findIndex((item) => item === formula);
+    console.log("index", i);
+    data.splice(i, 1);
+    console.log("delete data succesful.");
+
+    // save data to jsonfile
+    fs.writeFile(jsonFile, JSON.stringify(data), "utf8", (res) => {
+        console.log("Update data.json");
+    });
+
+    res.set(200).send({ isError: false, message: "Delete formular success" });
 });
 
 app.listen(5000, function () {

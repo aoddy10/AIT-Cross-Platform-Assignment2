@@ -1,20 +1,20 @@
 [
     {
-        "name": "Gross Profit",
-        "description": "Use to calculate gross profit and loss",
+        "name": "Gross profit",
+        "description": "Use to calculate gross profit for company.",
         "equation": "Inc - Exp",
         "variables": [
-            { "letter": "Inc", "meaning": "Income", "value": 0 },
+            { "letter": "Inc", "meaning": "Income my", "value": 0 },
             { "letter": "Exp", "meaning": "Expense", "value": 0 }
         ]
     },
     {
-        "name": "test",
+        "name": "adffdfa",
         "description": "",
-        "equation": "(x*y)-x",
+        "equation": "a+b",
         "variables": [
-            { "letter": "x", "meaning": "dfasdfsdf", "value": 0 },
-            { "letter": "y", "meaning": "dfadsfsdafasdf", "value": 0 }
+            { "letter": "a", "meaning": "fadfs", "value": 0 },
+            { "letter": "b", "meaning": "dfadfas", "value": 0 }
         ]
     }
 ]

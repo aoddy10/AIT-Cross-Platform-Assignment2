@@ -81,9 +81,20 @@ class AddFormula extends React.Component {
           style={styles.input}
         />
 
-        <Subheading>Variables</Subheading>
-        <AddVariable onAddNewVariable={this.onAddNewVariable} />
-        <Paragraph>{this.state.variableList}</Paragraph>
+        <View
+          style={{
+            borderWidth: 1,
+            padding: 8,
+            borderColor: '#808080',
+            marginBottom: 16,
+          }}>
+          <Subheading>Variables</Subheading>
+          {this.state.variableList ? (
+            <View>{this.state.variableList}</View>
+          ) : null}
+
+          <AddVariable onAddNewVariable={this.onAddNewVariable} />
+        </View>
 
         <View>
           <Button

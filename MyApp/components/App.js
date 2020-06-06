@@ -14,6 +14,8 @@ import {
   Text,
   StatusBar,
   Button,
+  KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 
 import {
@@ -23,6 +25,8 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+
+import AsyncStorage from '@react-native-community/async-storage';
 
 import FormulaList from './FormulaList';
 import AddFormula from './AddFormular';
@@ -51,20 +55,35 @@ class App extends React.Component {
 
   storeData = async value => {
     try {
-      await AsyncStorage.setItem('@storage_Key', value);
-    } catch (e) {
-      // saving error
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem('myFormula', jsonValue);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('myFormula');
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (error) {
+      console.log(error);
     }
   };
 
   async componentDidMount() {
-    let result = await HttpService.get('/formula/all');
-    // check response data
-    if (result.status !== 200 || !result.data) return;
-    this.setState({formulas: result.data});
+    await HttpService.get('/formula/all')
+      .then(response => {
+        console.log('load data from server...');
+        this.setState({formulas: response.data});
+        // save to local storage
+        this.storeData(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
 
-    // save to local storage
-    this.storeData(result.data);
+    return;
   }
 
   onAddNewFormula = async newFormula => {
@@ -75,7 +94,7 @@ class App extends React.Component {
     }
 
     // add new formula
-    let result = await HttpService.post('/addNewFormula', newFormula)
+    let result = await HttpService.post('/formula/addNew', newFormula)
       .then(response => {
         return response;
       })
@@ -100,8 +119,8 @@ class App extends React.Component {
     this.onShowFormulaList();
   };
 
-  onShowFormulaList = () => {
-    this.setState({
+  onShowFormulaList = async () => {
+    await this.setState({
       showFormulaList: true,
       showAddFormula: false,
       showFormula: false,
@@ -117,6 +136,45 @@ class App extends React.Component {
     });
   };
 
+  onDeleteFormula = async formula => {
+    // delete in micro service server
+    let deleteResult = await HttpService.post('/formula/delete', formula)
+      .then(response => {
+        return response.data;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+    if (deleteResult.isError === true) {
+      alert(deleteResult.message);
+      return;
+    }
+    // remove formula from state
+    const i = this.state.formulas.findIndex(item => item === formula);
+    const formulas = this.state.formulas;
+    formulas.splice(i, 1);
+    this.setState({formulas: formulas});
+    // update to local strage
+    this.storeData(this.state.formulas);
+  };
+
+  confirmToDeleteFormula = formula => {
+    const text = 'Formula name: ' + formula.name;
+    Alert.alert(
+      'Pleaese confirm to delete',
+      text,
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: () => this.onDeleteFormula(formula)},
+      ],
+      {cancelable: true},
+    );
+  };
+
   handleShowAddFormula = async () => {
     await this.setState({
       showFormulaList: false,
@@ -127,48 +185,58 @@ class App extends React.Component {
 
   render() {
     return (
-      <PaperProvider theme={this.theme}>
-        <Appbar.Header>
-          <Appbar.Content title={appName} />
-          <Badge
-            visible={
-              this.state.formulas.length && this.state.formulas.length > 0
-            }
-            size={16}
-            style={{position: 'absolute', top: 5, right: 5}}>
-            {this.state.formulas.length}
-          </Badge>
-          <Appbar.Action
-            icon={'plus'}
-            onPress={() => this.handleShowAddFormula()}
-          />
-          <Appbar.Action
-            icon={
-              this.state.formulas.length ? 'dots-horizontal' : 'dots-vertical'
-            }
-          />
-        </Appbar.Header>
+      <KeyboardAvoidingView
+        style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}
+        enabled
+        keyboardVerticalOffset={20}>
+        <ScrollView>
+          <PaperProvider theme={this.theme}>
+            <Appbar.Header>
+              <Appbar.Content title={appName} />
+              <Badge
+                visible={
+                  this.state.formulas.length && this.state.formulas.length > 0
+                }
+                size={16}
+                style={{position: 'absolute', top: 5, right: 5}}>
+                {this.state.formulas.length}
+              </Badge>
+              <Appbar.Action
+                icon={'plus'}
+                onPress={() => this.handleShowAddFormula()}
+              />
+              <Appbar.Action
+                icon={
+                  this.state.formulas.length
+                    ? 'dots-horizontal'
+                    : 'dots-vertical'
+                }
+              />
+            </Appbar.Header>
 
-        <View style={styles.container}>
-          {this.state.showFormulaList ? (
-            <FormulaList
-              formulas={this.state.formulas}
-              onSelectFormula={this.onSelectFormula}
-            />
-          ) : null}
+            <View style={styles.container}>
+              {this.state.showFormulaList ? (
+                <FormulaList
+                  formulas={this.state.formulas}
+                  onSelectFormula={this.onSelectFormula}
+                  onSelectDeleteFormula={this.confirmToDeleteFormula}
+                />
+              ) : null}
 
-          {this.state.showAddFormula ? (
-            <AddFormula onAddNewFormula={this.onAddNewFormula} />
-          ) : null}
+              {this.state.showAddFormula ? (
+                <AddFormula onAddNewFormula={this.onAddNewFormula} />
+              ) : null}
 
-          {this.state.showFormula ? (
-            <Formula
-              formula={this.state.selectedFormula}
-              onClose={this.onShowFormulaList}
-            />
-          ) : null}
-        </View>
-      </PaperProvider>
+              {this.state.showFormula ? (
+                <Formula
+                  formula={this.state.selectedFormula}
+                  onClose={this.onShowFormulaList}
+                />
+              ) : null}
+            </View>
+          </PaperProvider>
+        </ScrollView>
+      </KeyboardAvoidingView>
     );
   }
 }
