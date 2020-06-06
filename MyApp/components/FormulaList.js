@@ -17,8 +17,8 @@ const FormulaList = ({formulas, onSelectFormula, onSelectDeleteFormula}) => {
     return <View>{formulaList}</View>;
   } else {
     return (
-      <View>
-        <Text>Please add new formula</Text>
+      <View style={{alignSelf: 'center', marginTop: 42}}>
+        <Text style={{fontSize: 20}}>Please add new formula</Text>
       </View>
     );
   }

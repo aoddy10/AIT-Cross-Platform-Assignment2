@@ -48,7 +48,6 @@ class Formula extends React.Component {
 
   onUpdateVariable = async variable => {
     // update value for variable
-    console.log(this.state.variables);
     let variables = this.state.variables;
     let i = await variables.findIndex(item => {
       return item.letter === variable.letter;

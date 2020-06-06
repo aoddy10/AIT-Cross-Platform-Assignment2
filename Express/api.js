@@ -19,9 +19,9 @@ app.get("/", function (req, res) {
 const jsonFile = "data.json";
 
 function readDataFile() {
-    let formulaData;
+    let formulaData = [];
     let rawdata = fs.readFileSync(jsonFile);
-    if (rawdata) formulaData = JSON.parse(rawdata);
+    if (rawdata != "") formulaData = JSON.parse(rawdata);
     return formulaData;
 }
 
@@ -65,14 +65,11 @@ app.post("/formula/delete", function (req, res, next) {
         return;
     }
     let formula = req.body;
-    console.log(formula);
 
     let data = readDataFile();
-    console.log(data);
 
     // remove formula from data
     let i = data.findIndex((item) => item === formula);
-    console.log("index", i);
     data.splice(i, 1);
     console.log("delete data succesful.");
 

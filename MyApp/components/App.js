@@ -97,9 +97,9 @@ class App extends React.Component {
     let variables = [];
     let c = '';
     let charArray = equation.split('');
-    console.log(charArray);
+
+    // get variable from equation
     charArray.forEach(item => {
-      console.log(this.isAlphabet(item));
       if (this.isAlphabet(item) == true) {
         c += item;
       } else {
@@ -112,7 +112,6 @@ class App extends React.Component {
     if (c != '') variables.push(c);
 
     // check variable in equation with variable list
-    console.log(variables, newFormula.variables);
     let isMatch = true;
     await variables.forEach(item => {
       const check = newFormula.variables.filter(element => {
@@ -120,7 +119,6 @@ class App extends React.Component {
       });
       if (check.length <= 0) isMatch = false;
     });
-    console.log(isMatch);
     return isMatch;
   };
 
@@ -211,6 +209,7 @@ class App extends React.Component {
         console.log(error);
       });
 
+    // check if error, exit function with alert
     if (deleteResult.isError === true) {
       alert(deleteResult.message);
       return;
