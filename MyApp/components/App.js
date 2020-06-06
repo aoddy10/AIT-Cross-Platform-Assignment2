@@ -86,10 +86,64 @@ class App extends React.Component {
     return;
   }
 
+  isAlphabet(char) {
+    return /^[A-Z]$/i.test(char);
+  }
+
+  checkEquationWithVariables = async newFormula => {
+    // if not match all variable, exit with message
+
+    const equation = newFormula.equation;
+    let variables = [];
+    let c = '';
+    let charArray = equation.split('');
+    console.log(charArray);
+    charArray.forEach(item => {
+      console.log(this.isAlphabet(item));
+      if (this.isAlphabet(item) == true) {
+        c += item;
+      } else {
+        // add to variable
+        if (c != '') variables.push(c);
+        // reset chariable
+        c = '';
+      }
+    });
+    if (c != '') variables.push(c);
+
+    // check variable in equation with variable list
+    console.log(variables, newFormula.variables);
+    let isMatch = true;
+    await variables.forEach(item => {
+      const check = newFormula.variables.filter(element => {
+        return element.letter == item;
+      });
+      if (check.length <= 0) isMatch = false;
+    });
+    console.log(isMatch);
+    return isMatch;
+  };
+
   onAddNewFormula = async newFormula => {
     // check if user click cancel in add new formular component
     if (!newFormula) {
       this.onShowFormulaList();
+      return;
+    }
+
+    // validate equotation by comapare with variable
+    if ((await this.checkEquationWithVariables(newFormula)) == false) {
+      Alert.alert(
+        'Error',
+        'Equation and variables not match! Please check and try again.',
+        [
+          {
+            text: 'OK',
+            style: 'cancel',
+          },
+        ],
+        {cancelable: true},
+      );
       return;
     }
 
@@ -103,7 +157,18 @@ class App extends React.Component {
       });
     // check if http request is successful
     if (result.status !== 200) {
-      // TODO: display error toast
+      // display error
+      Alert.alert(
+        'Error',
+        result.message,
+        [
+          {
+            text: 'OK',
+            style: 'cancel',
+          },
+        ],
+        {cancelable: true},
+      );
       return;
     }
 
