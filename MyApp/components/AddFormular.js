@@ -52,7 +52,7 @@ class AddFormula extends React.Component {
   render() {
     return (
       <View>
-        <Title>Add New Formular</Title>
+        <Title>Add New Formula</Title>
         <Subheading>Detail:</Subheading>
         <TextInput
           label="Formula name"
